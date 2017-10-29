@@ -1,0 +1,138 @@
+animation 112
+	delay	1
+	mode	Animation_Step
+	step	120
+		resource	13
+			position	0	0	100	120
+			truncate	0	0	128	240
+		resource	12
+			position	0	0	100	120
+			truncate	0	0	640	1200
+		resource
+	step
+animation	102
+	delay	3
+	step	100
+		resource	11
+			position	0	0	100	120
+			truncate	200	20	880	800
+		resource	11
+			position	0	0	100	120
+			truncate	200	20	880	800
+		resource
+	step
+animation	114
+	delay	10
+	mode	Animation_Step
+	step	202
+		resource	14
+			position	0	-30	100	150
+			truncate	0	0	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	80	0	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	170	0	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	250	0	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	330	0	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	420	0	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	590	0	50	90
+		resource
+	step
+animation	115
+	delay	10
+	mode	Animation_Step
+	step	140
+		resource	14
+			position	0	-30	100	150
+			truncate	0	105	50	97
+		resource	14
+			position	0	-30	100	150
+			truncate	86	105	64	97
+		resource	14
+			position	0	-30	100	150
+			truncate	170	105	80	97
+		resource	14
+			position	0	-30	100	150
+			truncate	250	105	70	97
+		resource	14
+			position	0	-30	100	150
+			truncate	335	105	55	97
+		resource	14
+			position	0	-30	100	150
+			truncate	425	105	65	97
+		resource	14
+			position	0	-30	100	150
+			truncate	505	105	85	97
+		resource	14
+			position	0	-30	100	150
+			truncate	587	105	75	97
+		resource
+	step
+animation	116
+	delay	10
+	mode	Animation_Step
+	step	160
+		resource	14
+			position	0	-30	100	150
+			truncate	0	220	50	97
+		resource	14
+			position	0	-30	100	150
+			truncate	86	220	64	97
+		resource	14
+			position	0	-30	100	150
+			truncate	170	220	80	97
+		resource	14
+			position	0	-30	100	150
+			truncate	250	220	70	97
+		resource	14
+			position	0	-30	100	150
+			truncate	335	220	55	97
+		resource	14
+			position	0	-30	100	150
+			truncate	425	220	65	97
+		resource	14
+			position	0	-30	100	150
+			truncate	505	220	85	97
+		resource	14
+			position	0	-30	100	150
+			truncate	587	220	75	97
+		resource
+	step
+animation	117
+	delay	10
+	mode	Animation_Step
+	step	117
+		resource	14
+			position	0	-30	100	150
+			truncate	0	325	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	80	325	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	170	325	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	330	325	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	420	325	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	590	325	50	90
+		resource	14
+			position	0	-30	100	150
+			truncate	
+		resource
+	step
+animation

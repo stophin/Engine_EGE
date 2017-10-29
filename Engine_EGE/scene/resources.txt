@@ -1,0 +1,24 @@
+img/mask_1.png	300
+img/Test.bmp	10	300	2
+img/39-1.png	11	300	2
+img/LeftBlock.bmp	12
+img/LeftBlock1.bmp	13
+img/Person4.bmp	14	1
+img/cursor.png	22	1
+img/Player1-1.PNG	31	1
+img/Player1-2.PNG	32	1
+img/Player1-3.PNG	33	1
+img/Tree1-bk.bmp	201
+img/Tree2-bk.bmp	202
+img/Tree4-bk.bmp	203
+img/Tree5-bk.bmp	204
+img/Tree1.bmp	301	201	2
+img/Tree2.bmp	302	202	2
+img/Tree4.bmp	303	203	2
+img/Tree5.bmp	304	204	2
+img/mask.bmp	100
+img/001.png	101	100	2
+img/002.png	102	100	2
+img/003.png	103	100	2
+img/004.png	104	100	2
+img/005.png	105	100	2

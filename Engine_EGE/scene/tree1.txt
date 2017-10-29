@@ -1,0 +1,19 @@
+flatting	0	0	39	26
+tall	124
+animation	112
+	delay	1
+	step	102
+		resource	301
+			position	-23	0	97	125
+			truncate	0	0	97	125
+		resource
+	step
+animation	dead	down
+	delay	1
+	step	102
+		resource	305
+			position	0	80	48	42
+			truncate	16	6	225	198
+		resource
+	step
+animation
