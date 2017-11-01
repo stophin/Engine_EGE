@@ -578,7 +578,7 @@ VOID getResource()
 	}
 }
 
-void createMap()
+void createMap(World& world, FLOAT scale)
 {
 	FILE * fp = NULL;
 	Roles * role = NULL;
@@ -617,7 +617,16 @@ void createMap()
 					role->animations.addAnimation(animation, 112)\
 						->addSequence(new ObjectManager(), 120)\
 						->addStep(new Objects(resm.getResource(index), RectF(0, 0, 96, 47), RectF(0, 0, 96, 47)), 102);
-					role->setFlatting(RectF(j * 80, i * 45, 80, 45), 47);
+					RectF flatting = RectF(j * 80, i * 45, 80, 45);
+					FLOAT tall = 47;
+					flatting.Width *= scale;
+					flatting.Height *= scale;
+					flatting.X *= scale;
+					flatting.Y *= scale;
+					role->scale = scale;
+					tall *= scale;
+					role->setFlatting(flatting, tall);
+
 					world.addRole(role, Role_Type::Back);
 
 					if (lprole) {
@@ -713,7 +722,7 @@ VOID Initialize()
 	cursor->setFlatting(RectF(0, 0, 10, 14), 14);
 	preview.addRole(cursor, Role_Type::Cursor);
 
-	role = createRole("./scene/player.txt", 0.5);
+	role = createRole("./scene/player.txt", 0.25);
 	role->setFlatting(RectF(100, 100, 40, 25), role->tall);
 	preview.addRole(role, Role_Type::Player);
 	preview.focus = role;
@@ -724,16 +733,17 @@ VOID Initialize()
 			continue;
 		}
 		sprintf_s(temp, "./scene/tree%d.txt", id);
-		role = createRole(temp, 2);
+		role = createRole(temp, 1);
 		role->setFlatting(RectF(::rand() % 300, ::rand() % 300, role->flatting.Width, role->flatting.Height), role->tall);
 		preview.addRole(role);
 	}
 
-	preview.display.X = 100;
-	preview.display.Y = 100;
+	preview.display.X = 50;
+	preview.display.Y = 50;
 	preview.offset(100, 100);
 
-	createMap();
+	createMap(world, 1);
+	createMap(preview, 0.5);
 }
 
 VOID onTimer()
