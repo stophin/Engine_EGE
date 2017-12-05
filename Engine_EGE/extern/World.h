@@ -2,6 +2,7 @@
 
 #include "MultiLinkList.h"
 #include "Roles.h"
+#include "QuadTree.h"
 
 class World
 {
@@ -34,7 +35,8 @@ public:
 	void insertSortsBacks(Roles * role, MultiLinkList<Roles>::COMPARE_FUN fun);
 	void removeSortsBacks(Roles * role);
 
-	void * quadTree;
+	QuadTree quadTree;
+	void changeQuadTree(Roles * role);
 	void * binTree;
 	
 	VOID addRole(Roles * role, Role_Type::type type = Role_Type::Normal);

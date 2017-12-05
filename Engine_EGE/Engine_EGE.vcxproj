@@ -41,14 +41,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\ege15.04\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\ege15.04\lib\vc2013\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\ege15.04\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\ege15.04\lib\vc2013\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(RootNamespace)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>E:\ege15.04\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\ege15.04\lib\vc2013\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\ege15.04\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\ege15.04\lib\vc2013\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(RootNamespace)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -90,6 +90,7 @@
     <ClInclude Include="common\EPoint.h" />
     <ClInclude Include="extern\AnimationManager.h" />
     <ClInclude Include="extern\Animations.h" />
+    <ClInclude Include="extern\BinTree.h" />
     <ClInclude Include="extern\Constants.h" />
     <ClInclude Include="extern\Drawable.h" />
     <ClInclude Include="extern\LinkList.h" />
@@ -98,6 +99,7 @@
     <ClInclude Include="extern\Objects.h" />
     <ClInclude Include="extern\Paths.h" />
     <ClInclude Include="extern\Projection.h" />
+    <ClInclude Include="extern\QuadTree.h" />
     <ClInclude Include="extern\Relation.h" />
     <ClInclude Include="extern\ResourceManager.h" />
     <ClInclude Include="extern\Resources.h" />
@@ -122,6 +124,7 @@
     <ClCompile Include="extern\Objects.cpp" />
     <ClCompile Include="extern\Paths.cpp" />
     <ClCompile Include="extern\Projection.cpp" />
+    <ClCompile Include="extern\QuadTree.cpp" />
     <ClCompile Include="extern\Relation.cpp" />
     <ClCompile Include="extern\ResourceManager.cpp" />
     <ClCompile Include="extern\Resources.cpp" />

@@ -64,7 +64,7 @@ namespace Role_Link  {
 		AStars = 9,
 		Temp1,
 		Temp2,
-		Max
+		Max = Role_Link::Temp2 + 10
 	};
 }
 

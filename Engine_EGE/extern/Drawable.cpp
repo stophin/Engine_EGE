@@ -737,6 +737,17 @@ VOID Initialize()
 		role->setFlatting(RectF(::rand() % 300, ::rand() % 300, role->flatting.Width, role->flatting.Height), role->tall);
 		preview.addRole(role);
 	}
+	for (i = 0; i < 300; i++)
+	{
+		int id = rand() % 4 + 1;
+		if (!(id >= 1 && id <= 4)) {
+			continue;
+		}
+		sprintf_s(temp, "./scene/tree%d.txt", id);
+		role = createRole(temp, 1);
+		role->setFlatting(RectF(::rand() % 5000, ::rand() % 5000, role->flatting.Width, role->flatting.Height), role->tall);
+		preview.addRole(role);
+	}
 
 	preview.display.X = 50;
 	preview.display.Y = 50;

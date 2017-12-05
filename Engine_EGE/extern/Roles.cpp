@@ -437,11 +437,11 @@ void Roles::moveDelta(FLOAT dx, FLOAT dy) {
 		
 		this->moveFlat(dx * this->flatting.Width, dy * this->flatting.Height);
 		this->world->refreshDepth(this);
-		/*
-		if (this->world->quadTree) {
-			this->world->quadTree.move(this);
+
+		if (1) {
+			this->world->changeQuadTree(this);
 		}
-		*/
+		
 
 		if (this->following)
 		{

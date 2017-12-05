@@ -17,7 +17,7 @@ sortsbacks(Role_Link::SortBacks),
 astar(Role_Link::AStars),
 focus(NULL),
 cursor(NULL),
-quadTree(NULL),
+quadTree(0, 0, 0, DEF_QUAD_W, DEF_QUAD_H, NULL, 0),
 binTree(NULL)
 {
 }
@@ -137,10 +137,9 @@ VOID World::addRole(Roles * role, Role_Type::type type)
 		this->refreshDepth(role, 0);
 		//this->refreshGeometryCut();
 		this->objects.insertLink(role);
+		
+		this->quadTree.Insert(role);
 		/*
-		if (this->quadTree) {
-			this->quadTree.insert(role);
-		}
 		if (this->binTree) {
 			this->binTree.insertNode(role);
 		}
@@ -150,10 +149,8 @@ VOID World::addRole(Roles * role, Role_Type::type type)
 		this->players.insertLink(role);
 		this->objects.insertLink(role);
 
+		this->quadTree.Insert(role);
 		/*
-		if (this->quadTree) {
-			this->quadTree.insert(role);
-		}
 		if (this->binTree) {
 			this->binTree.insertNode(role);
 		}
@@ -527,14 +524,11 @@ MultiLinkList<Roles> * World::getCollision(Roles * item, MultiLinkList<Roles> * 
 	{
 		return collision;
 	}
-	/*
-	if (this->quadTree)
-	{
-		this->quadTree.move(item);
-		this->quadTree.collision(item, collision, graphics);
+	if (1) {
+		this->quadTree.Change(item);
+		this->quadTree.Collision(item, collision);
 		return collision;
 	}
-	*/
 	if (this->objects.link == NULL)
 	{
 		return collision;
@@ -584,11 +578,9 @@ MultiLinkList<Roles> * World::refreshDepth(Roles * item, MultiLinkList<Roles> * 
 	Roles * before = NULL;
 	Roles * after = NULL;
 	MultiLinkList<Roles> * linkList = &this->sorts;
-	/*
-	if (0 && item->quadTree) {
-		linkList = item->quadTree.objects;
+	if (0 ) {
+		linkList = &((QuadTree*)item->quadTree)->objects;
 	}
-	*/
 	Roles * tango = linkList->link;
 	if (tango == NULL)
 	{
@@ -664,4 +656,9 @@ INT World::geometryCut(Roles * item)
 		return 1;
 	}
 	return 0;
+}
+
+
+void World::changeQuadTree(Roles * role) {
+	this->quadTree.Change(role);
 }
