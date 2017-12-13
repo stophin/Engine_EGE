@@ -18,7 +18,7 @@ astar(Role_Link::AStars),
 focus(NULL),
 cursor(NULL),
 quadTree(0, 0, 0, DEF_QUAD_W, DEF_QUAD_H, NULL, 0),
-binTree(NULL)
+binTree()
 {
 }
 
@@ -139,22 +139,14 @@ VOID World::addRole(Roles * role, Role_Type::type type)
 		this->objects.insertLink(role);
 		
 		this->quadTree.Insert(role);
-		/*
-		if (this->binTree) {
-			this->binTree.insertNode(role);
-		}
-		*/
+		this->binTree.insertNode(role);
 		break;
 	case Role_Type::Player:
 		this->players.insertLink(role);
 		this->objects.insertLink(role);
 
 		this->quadTree.Insert(role);
-		/*
-		if (this->binTree) {
-			this->binTree.insertNode(role);
-		}
-		*/
+		this->binTree.insertNode(role);
 		break;
 	case Role_Type::Cursor:
 		this->fronts.insertLink(role);

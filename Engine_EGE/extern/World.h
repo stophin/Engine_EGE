@@ -3,6 +3,7 @@
 #include "MultiLinkList.h"
 #include "Roles.h"
 #include "QuadTree.h"
+#include "BinTree.h"
 
 class World
 {
@@ -37,7 +38,7 @@ public:
 
 	QuadTree quadTree;
 	void changeQuadTree(Roles * role);
-	void * binTree;
+	BinTree binTree;
 	
 	VOID addRole(Roles * role, Role_Type::type type = Role_Type::Normal);
 	Roles * removeRole(Roles * role);

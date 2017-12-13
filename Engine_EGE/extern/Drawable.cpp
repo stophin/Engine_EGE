@@ -737,6 +737,8 @@ VOID Initialize()
 		role->setFlatting(RectF(::rand() % 300, ::rand() % 300, role->flatting.Width, role->flatting.Height), role->tall);
 		preview.addRole(role);
 	}
+	INT count = 100;
+	INT index = 0;
 	for (i = 0; i < 300; i++)
 	{
 		int id = rand() % 4 + 1;
@@ -745,6 +747,9 @@ VOID Initialize()
 		}
 		sprintf_s(temp, "./scene/tree%d.txt", id);
 		role = createRole(temp, 1);
+		if (count-- == 0) {
+			index = role->uniqueID;
+		}
 		role->setFlatting(RectF(::rand() % 5000, ::rand() % 5000, role->flatting.Width, role->flatting.Height), role->tall);
 		preview.addRole(role);
 	}
@@ -755,6 +760,8 @@ VOID Initialize()
 
 	createMap(world, 1);
 	createMap(preview, 0.5);
+
+	world.focus = world.binTree.getRole(index);
 }
 
 VOID onTimer()
