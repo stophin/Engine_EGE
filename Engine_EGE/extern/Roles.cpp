@@ -5,6 +5,9 @@
 #include "World.h"
 #include "Paths.h"
 
+#include "../NanoCGR.h"
+extern NanoCGR nanoCGR;
+
 Roles::Roles() :
 count(0),
 attacked(0),
@@ -442,6 +445,9 @@ void Roles::moveDelta(FLOAT dx, FLOAT dy) {
 			this->world->changeQuadTree(this);
 		}
 		
+		char temp[100];
+		sprintf_s(temp, "Position: %.2f, %.2f", (this->flatting.X - this->world->geometry.X), (this->flatting.Y - this->world->geometry.Y));
+		nanoCGR.Send(temp);
 
 		if (this->following)
 		{

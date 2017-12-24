@@ -7,6 +7,9 @@ World preview;
 World world;
 ResourceManager resm;
 
+#include "../NanoCGR.h"
+NanoCGR nanoCGR;
+
 INT isresize = -1;
 PAINTSTRUCT ps;
 HDC hdc;
