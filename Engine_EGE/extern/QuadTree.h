@@ -49,8 +49,8 @@ enum QuadTree_Link {
 
 #define MAX_QUARDANTS	4
 #define MAX_OBJECTS		5
-#define MAX_LEVELS		Role_Link::Max - 3
-#define GET_LINK_INDEX(level)	(level + 3 - 1)
+#define MAX_LEVELS		Role_Link::Max - Role_Link::End //reserved for normal linklist use
+#define GET_LINK_INDEX(level)	(level + Role_Link::End - 1)
 class QuadTree {
 public:
 	QuadTree(INT level, EFTYPE x, EFTYPE y, EFTYPE w, EFTYPE h,

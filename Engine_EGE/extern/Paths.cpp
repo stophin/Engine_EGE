@@ -76,7 +76,7 @@ VOID Paths::getF(Roles * role, Paths * path)
 	collisions.clearLink();
 	role->moveFlat(x, y);
 	Roles * cursor = role->world->cursor;
-	FLOAT o_x, o_y;
+	FLOAT o_x = 0, o_y = 0;
 	if (cursor)
 	{
 		o_x = cursor->flatting.X;

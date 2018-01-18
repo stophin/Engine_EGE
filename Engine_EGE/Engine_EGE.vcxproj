@@ -47,8 +47,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>E:\ege15.04\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\ege15.04\lib\vc2013\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\ege15.04\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\ege15.04\lib\vc2013\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(RootNamespace)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -94,6 +94,7 @@
     <ClInclude Include="extern\Constants.h" />
     <ClInclude Include="extern\Drawable.h" />
     <ClInclude Include="extern\LinkList.h" />
+    <ClInclude Include="extern\Loading.h" />
     <ClInclude Include="extern\MultiLinkList.h" />
     <ClInclude Include="extern\ObjectManager.h" />
     <ClInclude Include="extern\Objects.h" />
