@@ -18,7 +18,7 @@ Objects::Objects(Resources * resource, RectF& destination, RectF& truncation, FL
 	this->reverse = 0;
 }
 
-Objects::Objects()
+Objects::Objects() : prev(NULL), next(NULL)
 {
 }
 

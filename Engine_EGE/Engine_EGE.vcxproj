@@ -105,6 +105,7 @@
     <ClInclude Include="extern\ResourceManager.h" />
     <ClInclude Include="extern\Resources.h" />
     <ClInclude Include="extern\Roles.h" />
+    <ClInclude Include="extern\StringMap.h" />
     <ClInclude Include="extern\World.h" />
     <ClInclude Include="flatform\ELibrary.h" />
     <ClInclude Include="flatform\EPaint.h" />

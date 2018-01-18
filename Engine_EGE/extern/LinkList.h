@@ -36,8 +36,6 @@ LinkList<T>::~LinkList()
 		{
 			removeLink(temp);
 
-			delete temp;
-
 			temp = this->link;
 		} while (temp);
 	}
@@ -114,6 +112,10 @@ VOID LinkList<T>::removeLink(T * link)
 	}
 
 	this->linkcount = this->linkcount - 1;
+
+	//this linklist manages the object,
+	//so delete it here
+	delete link;
 }
 
 template<typename T>

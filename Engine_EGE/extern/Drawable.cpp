@@ -220,6 +220,9 @@ VOID Initialize()
 
 	Loading::loadResource(resm);
 
+	Loading::loadMap(resm, world, 1);
+	Loading::loadMap(resm, preview, 0.5);
+
 	Roles * cursor = new Roles();
 	Animations * animation = new Animations();
 	animation->delay = 1;
@@ -231,6 +234,8 @@ VOID Initialize()
 	cursor->moveRole(100, 100);
 	world.addRole(cursor, Role_Type::Cursor);
 
+	Loading::loadScene(resm, world, 1);
+
 	Roles * role;
 	INT i, j;
 
@@ -238,6 +243,9 @@ VOID Initialize()
 	role->setFlatting(RectF(100, 100, 40, 25), role->tall);
 	world.addRole(role, Role_Type::Player);
 	world.focus = role;
+
+
+	return;
 
 	char temp[100];
 	for (i = 0; i < 300; i++)
@@ -298,9 +306,6 @@ VOID Initialize()
 	preview.display.X = 50;
 	preview.display.Y = 50;
 	preview.offset(100, 100);
-
-	Loading::loadMap(resm, world, 1);
-	Loading::loadMap(resm, preview, 0.5);
 
 	world.focus = world.binTree.getRole(index);
 }

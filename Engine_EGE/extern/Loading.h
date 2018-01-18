@@ -5,6 +5,7 @@
 #define _LOADING_H_
 
 #include "Drawable.h"
+#include"StringMap.h"
 
 #define MAX_STR	1024
 #define MAX_PAR	5
@@ -47,6 +48,7 @@ public:
 		}
 	}
 
+	static StringMap g_roles;
 
 	static Roles * loadRole(ResourceManager& resm, FLOAT scale, const char * fileName)
 	{
@@ -55,203 +57,236 @@ public:
 		}
 		FILE * fp;
 		fopen_s(&fp, fileName, "r");
+		CHAR allBuffer[MAX_STR * 30];
 		CHAR buffer[MAX_STR];
-		CHAR command[MAX_STR];
-		CHAR parameters[MAX_PAR][MAX_STR];
-		INT paramCount;
-		Roles * role = new Roles();
+		Roles * role = NULL;
 		if (fp)
 		{
-			Animations * animation = NULL;
-			ObjectManager * objectManager = NULL;
-			Resources * resource = NULL;
-			INT index;
-			INT tall = 0;
-			INT reverse = 0;
-			RectF *destination = NULL;
-			RectF *truncation = NULL;
-			RectF *flatting = NULL;
-
+			allBuffer[0] = 0;
 			while (!feof(fp))
 			{
 				fgets(buffer, MAX_STR, fp);
 
-				paramCount = parseParameter(buffer, command, parameters);
+				strcat_s(allBuffer, buffer);
+			}
+			strcat_s(allBuffer, "\n");
+			fclose(fp);
 
-				if (!strcmp(command, "animation"))
-				{
-					if (role && animation)
-					{
-						role->animations.addAnimation(animation, animation->uniqueID);
-						animation = NULL;
-					}
-					if (paramCount >= 1)
-					{
-						index = getDirection(parameters[0], parameters[1]);
-						if (index >= 0)
-						{
-							animation = new Animations();
-							animation->mode = Animation_Mode::Still;
-							animation->uniqueID = index;
-						}
-					}
-				}
-				else if (!strcmp(command, "following")) {
-					if (role && paramCount >= 1) {
-						index = atoi(parameters[0]);
-						if (index >= 0) {
-							role->following = index;
-						}
-					}
-				}
-				else if (!strcmp(command, "step"))
-				{
-					if (animation && objectManager)
-					{
-						animation->addSequence(objectManager, objectManager->uniqueID);
-						objectManager = NULL;
-					}
-					if (paramCount >= 1)
-					{
-						index = atoi(parameters[0]);
-						if (index >= 0)
-						{
-							objectManager = new ObjectManager();
-							objectManager->uniqueID = index;
+			//save buffer
+			g_roles.put(fileName, allBuffer);
 
-							if (animation && objectManager)
-							{
-								if (animation->mode == Animation_Mode::Step || animation->mode == Animation_Mode::Auto)
-									objectManager->callbackFunction = trigger;
-							}
-						}
+			role = createRole(resm, scale, allBuffer);
+		}
+
+		return role;
+	}
+
+	static Roles * createRole(ResourceManager& resm, FLOAT scale, CHAR * allBuffer) {
+		CHAR command[MAX_STR];
+		CHAR parameters[MAX_PAR][MAX_STR];
+		INT paramCount;
+		Roles * role = new Roles();
+
+		Animations * animation = NULL;
+		ObjectManager * objectManager = NULL;
+		Resources * resource = NULL;
+		INT index;
+		INT tall = 0;
+		INT reverse = 0;
+		RectF *destination = NULL;
+		RectF *truncation = NULL;
+		RectF *flatting = NULL;
+
+		CHAR * buffer = allBuffer, *preBuffer = NULL, * nexBuffer = allBuffer;
+		for (int i = 0; allBuffer[i]; i++) {
+			if (allBuffer[i] != '\n') {
+				continue;
+			}
+			if (preBuffer) {
+				*preBuffer = '\n';
+			}
+			preBuffer = &allBuffer[i];
+			*preBuffer = 0;
+			buffer = nexBuffer;
+			nexBuffer = &allBuffer[i + 1];
+
+			paramCount = parseParameter(buffer, command, parameters);
+
+			if (!strcmp(command, "animation"))
+			{
+				if (role && animation)
+				{
+					role->animations.addAnimation(animation, animation->uniqueID);
+					animation = NULL;
+				}
+				if (paramCount >= 1)
+				{
+					index = getDirection(parameters[0], parameters[1]);
+					if (index >= 0)
+					{
+						animation = new Animations();
+						animation->mode = Animation_Mode::Still;
+						animation->uniqueID = index;
 					}
 				}
-				else if (!strcmp(command, "resource"))
-				{
-					if (objectManager && resource)
-					{
-						Objects * object = new Objects();
-						object->reverse = reverse;
-						objectManager->addStep(object, resource, *destination, *truncation, resource->uniqueID, scale);
-						resource = NULL;
+			}
+			else if (!strcmp(command, "following")) {
+				if (role && paramCount >= 1) {
+					index = atoi(parameters[0]);
+					if (index >= 0) {
+						role->following = index;
 					}
-					if (paramCount >= 1)
+				}
+			}
+			else if (!strcmp(command, "step"))
+			{
+				if (animation && objectManager)
+				{
+					animation->addSequence(objectManager, objectManager->uniqueID);
+					objectManager = NULL;
+				}
+				if (paramCount >= 1)
+				{
+					index = atoi(parameters[0]);
+					if (index >= 0)
 					{
-						index = atoi(parameters[0]);
-						if (index > 0)
+						objectManager = new ObjectManager();
+						objectManager->uniqueID = index;
+
+						if (animation && objectManager)
 						{
-							resource = resm.getResource(index);
-						}
-						reverse = 0;
-					}
-				}
-				else if (!strcmp(command, "reverse"))
-				{
-					if (paramCount >= 1 && resource)
-					{
-						reverse = atoi(parameters[0]);
-					}
-				}
-				else if (!strcmp(command, "position"))
-				{
-					if (paramCount >= 4)
-					{
-						destination = new RectF();
-						destination->X = atoi(parameters[0]);
-						destination->Y = atoi(parameters[1]);
-						destination->Width = atoi(parameters[2]);
-						destination->Height = atoi(parameters[3]);
-					}
-				}
-				else if (!strcmp(command, "truncate"))
-				{
-					if (paramCount >= 4)
-					{
-						truncation = new RectF();
-						truncation->X = atoi(parameters[0]);
-						truncation->Y = atoi(parameters[1]);
-						truncation->Width = atoi(parameters[2]);
-						truncation->Height = atoi(parameters[3]);
-					}
-				}
-				else if (!strcmp(command, "flatting"))
-				{
-					if (paramCount >= 4)
-					{
-						flatting = new RectF();
-						flatting->X = atoi(parameters[0]);
-						flatting->Y = atoi(parameters[1]);
-						flatting->Width = atoi(parameters[2]);
-						flatting->Height = atoi(parameters[3]);
-					}
-				}
-				else if (!strcmp(command, "tall"))
-				{
-					if (paramCount >= 1)
-					{
-						index = atoi(parameters[0]);
-						if (index >= 0)
-						{
-							tall = index;
-						}
-					}
-				}
-				else if (!strcmp(command, "scale"))
-				{
-					if (paramCount >= 1)
-					{
-						scale = (FLOAT)(atoi(parameters[0])) / 100.0;
-						if (scale < 0)
-						{
-							scale = 1;
-						}
-					}
-				}
-				else if (!strcmp(command, "delay"))
-				{
-					if (paramCount >= 1 && animation)
-					{
-						index = atoi(parameters[0]);
-						if (animation && index > 0)
-						{
-							animation->delay = index;
-						}
-					}
-				}
-				else if (!strcmp(command, "mode"))
-				{
-					if (paramCount >= 1 && animation)
-					{
-						if (!strcmp(parameters[0], "Animation_Step"))
-						{
-							animation->mode = Animation_Mode::Step;
-						}
-						else if (!strcmp(parameters[0], "Animation_Auto"))
-						{
-							animation->mode = Animation_Mode::Auto;
-						}
-						else if (!strcmp(parameters[0], "Animation_Loop"))
-						{
-							animation->mode = Animation_Mode::Loop;
+							if (animation->mode == Animation_Mode::Step || animation->mode == Animation_Mode::Auto)
+								objectManager->callbackFunction = trigger;
 						}
 					}
 				}
 			}
-			fclose(fp);
-
-			if (flatting) {
-				role->scale = scale;
-				tall *= scale;
-				flatting->Width *= scale;
-				flatting->Height *= scale;
-				flatting->X *= scale;
-				flatting->Y *= scale;
-
-				role->setFlatting(*flatting, tall);
+			else if (!strcmp(command, "resource"))
+			{
+				if (objectManager && resource)
+				{
+					Objects * object = new Objects();
+					object->reverse = reverse;
+					objectManager->addStep(object, resource, *destination, *truncation, resource->uniqueID, scale);
+					resource = NULL;
+				}
+				if (paramCount >= 1)
+				{
+					index = atoi(parameters[0]);
+					if (index > 0)
+					{
+						resource = resm.getResource(index);
+					}
+					reverse = 0;
+				}
+			}
+			else if (!strcmp(command, "reverse"))
+			{
+				if (paramCount >= 1 && resource)
+				{
+					reverse = atoi(parameters[0]);
+				}
+			}
+			else if (!strcmp(command, "position"))
+			{
+				if (paramCount >= 4)
+				{
+					destination = new RectF();
+					destination->X = atoi(parameters[0]);
+					destination->Y = atoi(parameters[1]);
+					destination->Width = atoi(parameters[2]);
+					destination->Height = atoi(parameters[3]);
+				}
+			}
+			else if (!strcmp(command, "truncate"))
+			{
+				if (paramCount >= 4)
+				{
+					truncation = new RectF();
+					truncation->X = atoi(parameters[0]);
+					truncation->Y = atoi(parameters[1]);
+					truncation->Width = atoi(parameters[2]);
+					truncation->Height = atoi(parameters[3]);
+				}
+			}
+			else if (!strcmp(command, "flatting"))
+			{
+				if (paramCount >= 4)
+				{
+					flatting = new RectF();
+					flatting->X = atoi(parameters[0]);
+					flatting->Y = atoi(parameters[1]);
+					flatting->Width = atoi(parameters[2]);
+					flatting->Height = atoi(parameters[3]);
+				}
+			}
+			else if (!strcmp(command, "tall"))
+			{
+				if (paramCount >= 1)
+				{
+					index = atoi(parameters[0]);
+					if (index >= 0)
+					{
+						tall = index;
+					}
+				}
+			}
+			else if (!strcmp(command, "scale"))
+			{
+				if (paramCount >= 1)
+				{
+					scale = (FLOAT)(atoi(parameters[0])) / 100.0;
+					if (scale < 0)
+					{
+						scale = 1;
+					}
+				}
+			}
+			else if (!strcmp(command, "delay"))
+			{
+				if (paramCount >= 1 && animation)
+				{
+					index = atoi(parameters[0]);
+					if (animation && index > 0)
+					{
+						animation->delay = index;
+					}
+				}
+			}
+			else if (!strcmp(command, "mode"))
+			{
+				if (paramCount >= 1 && animation)
+				{
+					if (!strcmp(parameters[0], "Animation_Step"))
+					{
+						animation->mode = Animation_Mode::Step;
+					}
+					else if (!strcmp(parameters[0], "Animation_Auto"))
+					{
+						animation->mode = Animation_Mode::Auto;
+					}
+					else if (!strcmp(parameters[0], "Animation_Loop"))
+					{
+						animation->mode = Animation_Mode::Loop;
+					}
+				}
 			}
 		}
 
+		if (flatting) {
+			role->scale = scale;
+			tall *= scale;
+			flatting->Width *= scale;
+			flatting->Height *= scale;
+			flatting->X *= scale;
+			flatting->Y *= scale;
+
+			role->setFlatting(*flatting, tall);
+		}
+
+		if (preBuffer) {
+			*preBuffer = '\n';
+		}
 		return role;
 	}
 
@@ -350,6 +385,67 @@ public:
 		}
 	}
 
+	static void loadScene(ResourceManager& resm, World& world, FLOAT scale)
+	{
+		FILE * fp = NULL;
+		Roles * role = NULL;
+		Animations * animation = NULL;
+		fopen_s(&fp, "./scene/scene.txt", "r");
+		if (fp)
+		{
+			INT i = 0;
+			INT j = 0;
+
+			CHAR buffer[MAX_STR];
+			CHAR command[MAX_STR];
+			CHAR command_t[MAX_STR];
+			CHAR parameters[MAX_PAR][MAX_STR];
+			Roles * role = NULL;
+			float scale = 1;
+			int index = 0;
+			
+			while (!feof(fp))
+			{
+				fgets(buffer, 1024, fp);
+
+				int length = parseParameter(buffer, command, parameters) + 1;
+
+				if (length >= 3) {
+					index = 0;
+					if (length >= 4) {
+						index = atoi(parameters[2]);
+					}
+					if (index < 0) {
+						index = 0;
+					}
+					scale = 1;
+					if (length >= 5) {
+						scale = atof(parameters[3]);
+					}
+					if (scale < 0 || scale > 10) {
+						scale = 1;
+					}
+					strcpy_s(command_t, "scene/");
+					strcat_s(command_t, command);
+					strcat_s(command_t, ".txt");
+					char * data = g_roles.getValue(command_t);
+					if (NULL == data) {
+						role = loadRole(resm, scale, command_t);
+					}
+					else {
+						role = createRole(resm, scale, data);
+					}
+					if (role) {
+						role->uniqueID = index;
+						role->moveFlat(atoi(parameters[0]), atoi(parameters[1]));
+						world.addRole(role);
+					}
+				}
+
+			}
+			fclose(fp);
+		}
+	}
 
 	static INT parseParameter(CHAR buffer[], CHAR command[], CHAR parameters[][MAX_STR])
 	{
@@ -477,5 +573,6 @@ public:
 
 };
 
+StringMap Loading::g_roles;
 
 #endif

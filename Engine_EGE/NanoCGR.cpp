@@ -5,7 +5,7 @@
 
 SOCKET sockClient;		// 连接成功后的套接字
 HANDLE bufferMutex;		// 令其能互斥成功正常通信的信号量句柄
-const int DefaultPort = 6000;//9005
+const int DefaultPort = 9005;//9005
 
 NanoCGR::NanoCGR()
 {
