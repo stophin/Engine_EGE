@@ -10,15 +10,17 @@
 #define MAX_VALUE_LEN	
 class StringElement {
 public:
-	StringElement(const char* str) : prev(NULL), next(NULL) {
+	StringElement(const char* str) : prev(NULL), next(NULL), str(NULL){
 		int len = strlen(str);
-		this->str = new char[len];
+		this->str = new char[len + 1];
 		memcpy(this->str, str, len);
 		this->str[len] = 0;
 	}
 
 	~StringElement() {
-		delete[] this->str;
+		if (this->str) {
+			delete[] this->str;
+		}
 		this->str = NULL;
 	}
 
