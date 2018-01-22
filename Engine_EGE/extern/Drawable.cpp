@@ -234,7 +234,7 @@ VOID Initialize()
 	cursor->moveRole(100, 100);
 	world.addRole(cursor, Role_Type::Cursor);
 
-	Loading::loadScene(resm, world, 1);
+	Loading::loadScene(resm, world, 1.5);
 
 	Roles * role;
 	INT i, j;

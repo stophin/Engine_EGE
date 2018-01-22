@@ -385,7 +385,7 @@ public:
 		}
 	}
 
-	static void loadScene(ResourceManager& resm, World& world, FLOAT scale)
+	static void loadScene(ResourceManager& resm, World& world, FLOAT _scale)
 	{
 		FILE * fp = NULL;
 		Roles * role = NULL;
@@ -425,6 +425,7 @@ public:
 					if (scale < 0 || scale > 10) {
 						scale = 1;
 					}
+					scale *= _scale;
 					strcpy_s(command_t, "scene/");
 					strcat_s(command_t, command);
 					strcat_s(command_t, ".txt");
