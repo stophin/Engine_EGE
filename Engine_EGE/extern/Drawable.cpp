@@ -87,6 +87,9 @@ Roles * onPaint(HWND hWnd)
 		sprintf_s(fmt, "offset:(%.2f, %.2f) W*H:(%.2f x %.2f)", world.geometry.X, world.geometry.Y, world.geometry.Width, world.geometry.Height);
 		EP_Text(10, 70, fmt);
 
+		sprintf_s(fmt, "Position: %.2f, %.2f", (role->flatting.X - world.geometry.X), (role->flatting.Y - world.geometry.Y));
+		EP_Text(10, 90, fmt);
+
 		sprintf_s(fmt, "%d", world.count);
 		EP_Text(10, 80, fmt);
 
