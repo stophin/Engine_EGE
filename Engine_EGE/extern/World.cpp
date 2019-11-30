@@ -390,8 +390,8 @@ VOID World::refreshGeometryCut(FLOAT flatX, FLOAT flatY)
 	if (this->sortsbacks.link) {
 		MultiLinkList<Roles> tempLink(Role_Link::Temp1);
 		temp = this->sortsbacks.link;
-		int layw = (int)(abs(flatX) / temp->flatting.Width + 2);
-		int layh = (int)(abs(flatY) / temp->flatting.Height + 2);
+		int layw = (int)(EP_ABS(flatX) / temp->flatting.Width + 2);
+		int layh = (int)(EP_ABS(flatY) / temp->flatting.Height + 2);
 		int i, j, k;
 		do
 		{

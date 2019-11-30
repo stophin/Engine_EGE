@@ -218,6 +218,9 @@ VOID trigger(void * lParam, void * wParam)
 
 VOID Initialize()
 {
+
+	nanoCGR.Init();
+
 	preview.resize(10, 10);
 	world.resize(getwidth(), getheight());
 
