@@ -2,6 +2,9 @@
 //
 
 #include "NanoCGR.h"
+#include "extern/Loading.h"
+extern World world;
+extern ResourceManager resm;
 
 SOCKET sockClient;		// 连接成功后的套接字
 HANDLE bufferMutex;		// 令其能互斥成功正常通信的信号量句柄
@@ -43,7 +46,9 @@ int NanoCGR::Init() {
 	// 第二个参数：设定所需要连接的地址信息
 	// 第三个参数：地址的长度
 	SOCKADDR_IN addrSrv;
-	addrSrv.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");		// 本地回路地址是127.0.0.1; 
+	const char * addr = "127.0.0.1";
+	//const char * addr = "192.168.91.129";
+	addrSrv.sin_addr.S_un.S_addr = inet_addr(addr);		// 本地回路地址是127.0.0.1; 
 	addrSrv.sin_family = AF_INET;
 	addrSrv.sin_port = htons(DefaultPort);
 	while (SOCKET_ERROR == connect(sockClient, (SOCKADDR*)&addrSrv, sizeof(SOCKADDR))){
@@ -68,7 +73,7 @@ int NanoCGR::Init() {
 	//cin.sync();
 	//cout << "本客户端已准备就绪，用户可直接输入文字向服务器反馈信息。\n";
 
-	send(sockClient, "\nAttention: A Client has enter...\n", 200, 0);
+	//send(sockClient, "\nAttention: A Client has enter...\n", 200, 0);
 
 	bufferMutex = CreateSemaphore(NULL, 1, 1, NULL);
 
@@ -95,7 +100,7 @@ int NanoCGR::Send(const char * str) {
 		return -1;
 	};
 	WaitForSingleObject(bufferMutex, INFINITE);		// P（资源未被占用） 
-	send(sockClient, str, 200, 0);
+	send(sockClient, str, strlen(str), 0);
 	ReleaseSemaphore(bufferMutex, 1, NULL);		// V（资源占用完毕） 
 
 	return 0;
@@ -124,15 +129,18 @@ DWORD WINAPI NanoCGR::SendMessageThread(LPVOID IpParameter)
 	return 0;
 }
 
+void constServer(const char * str);
 
 DWORD WINAPI NanoCGR::ReceiveMessageThread(LPVOID IpParameter)
 {
 	while (1){
 		char recvBuf[300];
-		recv(sockClient, recvBuf, 200, 0);
+		int ret = recv(sockClient, recvBuf, 200, 0);
 		WaitForSingleObject(bufferMutex, INFINITE);		// P（资源未被占用）  
 
 		//printf("%s Says: %s", "Server", recvBuf);		// 接收信息
+		recvBuf[ret] = 0;
+		constServer(recvBuf);
 
 		ReleaseSemaphore(bufferMutex, 1, NULL);		// V（资源占用完毕） 
 	}
@@ -142,6 +150,63 @@ DWORD WINAPI NanoCGR::ReceiveMessageThread(LPVOID IpParameter)
 	WSACleanup();	// 终止对套接字库的使用
 
 	return 0;
+}
+
+void constServer(const char *str) {
+	char _str[100];
+	int len = strlen(str);
+	CharString::base64_decode(str, len, _str);
+	NanoCGR_Protocol p;
+	int offset = 0;
+	int size = 100;
+	DecodeProtocol(CharString, _str, offset, size, p);
+	INT sessionID;
+	Roles * role;
+	float x, y;
+	switch (p) {
+	case Nano_Login:
+		DecodeProtocol(CharString, _str, offset, size, sessionID);
+		printf("Login %d\n", sessionID);
+
+		if (sessionID < 0) {
+			sessionID = -sessionID;
+			world.focus->uniqueID = sessionID;
+			break;
+		}
+
+		role = world.roles.getLink(sessionID);
+		if (!role) {
+			role = Loading::loadRole(resm, 0.5, "./scene/player.txt");
+			role->setFlatting(RectF(100, 100, 40, 25), role->tall);
+			world.addRole(role, Role_Type::Player);
+			//world.focus = role;
+			role->uniqueID = sessionID;
+			role->following = 0;
+		}
+		break;
+	case Nano_Logout:
+		DecodeProtocol(CharString, _str, offset, size, sessionID);
+		printf("Logout %d\n", sessionID);
+
+		role = world.roles.getLink(sessionID);
+		if (role) {
+			role = world.removeRole(role);
+			printf("remove %p\n", role);
+		}
+		break;
+	case Nano_Position:
+		DecodeProtocol(CharString, _str, offset, size, sessionID, x, y);
+		printf("Position %d %.2f %.2f\n", sessionID, x, y);
+
+		role = world.roles.getLink(sessionID);
+		if (role) {
+			role->moveDelta((x + world.geometry.X - role->flatting.X) / role->flatting.Width, (y + world.geometry.Y - role->flatting.Y) / role->flatting.Height);
+		}
+		break;
+	default:
+		printf("Unknown\n");
+		break;
+	}
 }
 
 

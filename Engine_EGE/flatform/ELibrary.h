@@ -9,6 +9,8 @@
 #ifndef _ELIBRARY_H_
 #define _ELIBRARY_H_
 
+#define SHOW_CONSOLE
+
 #include <graphics.h>
 
 #include <wingdi.h>

@@ -574,6 +574,4 @@ public:
 
 };
 
-StringMap Loading::g_roles;
-
 #endif

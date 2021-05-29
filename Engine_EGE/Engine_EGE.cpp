@@ -19,6 +19,15 @@ int main(int argc, char* argv[])
 
 	
 	Initialize();
+
+	char temp[100];
+	char _temp[100];
+	int offset = 0;
+	int size = 100;
+	EncodeProtocol(CharString, temp, offset, size, Nano_Login);
+	temp[offset] = 0;
+	CharString::base64_encode((const unsigned char*)temp, offset, _temp);
+	nanoCGR.Send(_temp);
 	
 	//Roles * role = world.focus;
 
@@ -74,6 +83,7 @@ int main(int argc, char* argv[])
 		//delay_ms(100);
 		EP_RenderFlush();
 	} while (c != 27);
+
 	closegraph();
 }
 

@@ -2,6 +2,8 @@
 #include "Drawable.h"
 #include "Loading.h"
 
+StringMap Loading::g_roles;
+
 int DEBUG_MODE = DEBUG_GRADE_2;
 
 World preview;
@@ -101,6 +103,26 @@ Roles * onPaint(HWND hWnd)
 
 			EP_SetColor(BROWN);
 			EP_Rectangle(world.geometry);
+		}
+
+		if (1) {
+			role = world.players.link;
+			if (role) {
+				char temp[100];
+				do {
+
+					if (role->moving) {
+						EP_SetColor(RED);
+					}
+					else {
+						EP_SetColor(GREEN);
+					}
+					sprintf_s(temp, "%d", role->uniqueID);
+					EP_Text(role->position.X, role->position.Y - 50, temp);
+
+					role = world.players.next(role);
+				} while (role && role != world.players.link);
+			}
 		}
 	}
 	EP_SetColor(BROWN);

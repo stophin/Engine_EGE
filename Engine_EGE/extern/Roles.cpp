@@ -422,6 +422,20 @@ VOID Roles::fetchPath()
 		FLOAT dy = (this->nextPath->y - this->prevPath->y) / (FLOAT) this->fetchSpeed;
 
 		this->moveDelta(dx, dy);
+
+		/*
+		char temp[100];
+		sprintf_s(temp, "Position: %.2f, %.2f", (this->flatting.X - this->world->geometry.X), (this->flatting.Y - this->world->geometry.Y));
+		nanoCGR.Send(temp);
+		*/
+		char temp[100];
+		char _temp[100];
+		int offset = 0;
+		int size = 100;
+		EncodeProtocol(CharString, temp, offset, size, Nano_Position, (this->flatting.X - this->world->geometry.X), (this->flatting.Y - this->world->geometry.Y));
+		temp[offset] = 0;
+		CharString::base64_encode((const unsigned char *)temp, offset, _temp);
+		nanoCGR.Send(_temp);
 	}
 }
 
@@ -444,10 +458,6 @@ void Roles::moveDelta(FLOAT dx, FLOAT dy) {
 		if (1) {
 			this->world->changeQuadTree(this);
 		}
-		
-		char temp[100];
-		sprintf_s(temp, "Position: %.2f, %.2f", (this->flatting.X - this->world->geometry.X), (this->flatting.Y - this->world->geometry.Y));
-		nanoCGR.Send(temp);
 
 		if (this->following)
 		{
