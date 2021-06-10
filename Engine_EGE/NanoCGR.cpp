@@ -135,12 +135,32 @@ DWORD WINAPI NanoCGR::ReceiveMessageThread(LPVOID IpParameter)
 {
 	while (1){
 		char recvBuf[300];
-		int ret = recv(sockClient, recvBuf, 200, 0);
+		//int ret = recv(sockClient, recvBuf, 200, 0);
+		int ret = recv(sockClient, recvBuf, sizeof(int), 0);
+		if (ret <= 0) {
+			Sleep(1);
+			continue;
+		}
+		int size = *((int*)recvBuf);
+		if (size <= 0 || size > 300) {
+			Sleep(1);
+			continue;
+		}
+		char * str = recvBuf + sizeof(int);
+		ret = recv(sockClient, str, size, 0);
+		if (ret < 0) {
+			Sleep(1);
+			continue;
+		}
 		WaitForSingleObject(bufferMutex, INFINITE);		// P（资源未被占用）  
 
-		//printf("%s Says: %s", "Server", recvBuf);		// 接收信息
-		recvBuf[ret] = 0;
-		constServer(recvBuf);
+		str[ret] = 0;
+		printf("%s Says: %s\n", "Server", str);		// 接收信息
+		for (int i = 0; i < 6; i++) {
+			printf("%x ", str[i]);
+		}
+		printf("\n");
+		constServer(str);
 
 		ReleaseSemaphore(bufferMutex, 1, NULL);		// V（资源占用完毕） 
 	}

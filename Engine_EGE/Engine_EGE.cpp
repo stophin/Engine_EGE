@@ -6,6 +6,9 @@
 #include "extern/ResourceManager.h"
 #include "extern/Drawable.h"
 
+#include "NanoCGR.h"
+extern NanoCGR nanoCGR;
+
 extern World world;
 extern int isDrag;
 mouse_msg msg = { 0 };
