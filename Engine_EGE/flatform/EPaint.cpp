@@ -363,6 +363,9 @@ INT EP_TruncateImage(EPTYPE x, EPTYPE y, EPTYPE w, EPTYPE h, EIMAGE image, EPTYP
 				}
 				pxl_idx_d = pxl_idx + (j)* width + i;
 			}
+			if (pxl_idx_d >= width * height) {
+				continue;
+			}
 			if (dst[pxl_idx_d] != 0x00000000)
 			{
 				continue;
